@@ -1,0 +1,77 @@
+.fvm-steps {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: var(--color-light, #f8f9fa);
+    border-radius: 8px;
+    border: 1px solid var(--color-light-dark, #dee2e6);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.fvm-step {
+    padding: 4px 14px;
+    border-radius: 20px;
+    color: var(--color-muted, #6c757d);
+    background: transparent;
+    transition: all 0.2s;
+}
+
+.fvm-step.active {
+    background: var(--color-primary, #017e84);
+    color: #fff;
+    font-weight: 600;
+}
+
+.fvm-step-sep {
+    color: var(--color-muted, #adb5bd);
+    font-size: 16px;
+    line-height: 1;
+}
+
+.fvm-kanban-card {
+    padding: 10px 12px;
+    border-radius: 6px;
+    background: var(--color-view-bg, #fff);
+    transition: box-shadow 0.15s;
+}
+
+.fvm-kanban-card:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.fvm-result-summary .card {
+    min-width: 90px;
+    border-radius: 8px;
+    border: 1px solid var(--color-light-dark, #dee2e6);
+}
+
+.o_field_code_editor .CodeMirror {
+    min-height: 140px;
+    font-size: 13px;
+}
+
+.o_list_table .o_data_row.decoration-danger td {
+    background-color: rgba(220, 53, 69, 0.06);
+}
+
+.o_list_table .o_data_row.decoration-warning td {
+    background-color: rgba(255, 193, 7, 0.08);
+}
+
+.o_stat_info .o_stat_value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.modal-dialog:has(.o_form_view[model="import.validator.wizard"]),
+.modal-dialog:has(.o_form_view[model="template.generator.wizard"]) {
+    max-width: 760px;
+}
+
+.o_field_badge[name="field_ttype"] .badge {
+    background-color: #6f42c1 !important;
+    color: #fff !important;
+    font-size: 11px;
+}

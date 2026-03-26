@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_field_validation_rule_form" model="ir.ui.view">
+        <field name="name">field.validation.rule.form</field>
+        <field name="model">field.validation.rule</field>
+        <field name="arch" type="xml">
+            <form string="Validation Rule">
+                <header>
+                    <button name="toggle_active"
+                            string="Archive"
+                            type="object"
+                            invisible="not active"
+                            class="btn-secondary"/>
+                    <button name="toggle_active"
+                            string="Restore"
+                            type="object"
+                            invisible="active"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon"
+                            title="Archived"
+                            bg_color="bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Customer Email – Required"/></h1>
+                    </div>
+                    <group>
+                        <group string="Target Field">
+                            <field name="model_id"
+                                   options="{'no_create': True}"
+                                   placeholder="Select the model…"/>
+                            <field name="field_id"
+                                   options="{'no_create': True}"
+                                   placeholder="Select the field…"/>
+                            <field name="field_ttype" readonly="1"/>
+                        </group>
+                        <group string="Rule Configuration">
+                            <field name="rule_type"/>
+                            <field name="severity"/>
+                            <field name="sequence"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+
+                    <group string="Validation Parameters">
+                        <group invisible="rule_type != 'regex'">
+                            <field name="regex_pattern" placeholder="^[A-Z]{2,5}$"/>
+                            <field name="regex_flags" placeholder="I, M, S  (comma-separated)"/>
+                        </group>
+                        <group invisible="rule_type not in ('min_length', 'max_length')">
+                            <field name="param_min" string="Min Length"
+                                   invisible="rule_type != 'min_length'"/>
+                            <field name="param_max" string="Max Length"
+                                   invisible="rule_type != 'max_length'"/>
+                        </group>
+                        <group invisible="rule_type not in ('min_value', 'max_value')">
+                            <field name="param_min" string="Minimum Value"
+                                   invisible="rule_type != 'min_value'"/>
+                            <field name="param_max" string="Maximum Value"
+                                   invisible="rule_type != 'max_value'"/>
+                            <field name="param_min_date" string="Minimum Date"
+                                   invisible="rule_type != 'min_value'"/>
+                            <field name="param_max_date" string="Maximum Date"
+                                   invisible="rule_type != 'max_value'"/>
+                        </group>
+                        <group invisible="rule_type != 'allowed_values'">
+                            <field name="allowed_values_raw"
+                                   widget="text"
+                                   placeholder="One value per line&#10;e.g.:&#10;draft&#10;confirmed&#10;done"/>
+                        </group>
+                        <group invisible="rule_type != 'dependency'">
+                            <field name="depends_on_field_id"/>
+                            <field name="depends_on_value" placeholder="e.g. confirmed"/>
+                        </group>
+                        <group invisible="rule_type != 'date_format'">
+                            <field name="date_format_str" placeholder="%Y-%m-%d"/>
+                        </group>
+                        <group invisible="rule_type != 'python'" col="1">
+                            <field name="python_code"
+                                   widget="code"
+                                   options="{'mode': 'python'}"
+                                   placeholder="# Available: value, record, env, model_name, field_name&#10;if not value: return True&#10;return int(value) >= 18"/>
+                        </group>
+                    </group>
+
+                    <group string="Messages">
+                        <field name="error_message"
+                               widget="text"
+                               placeholder='Field "{field}" failed validation. Value: "{value}"'/>
+                        <field name="hint_text"
+                               widget="text"
+                               placeholder="Short hint shown in the generated import template column…"/>
+                    </group>
+
+                    <group string="Rule Sets">
+                        <field name="ruleset_ids" widget="many2many_tags"/>
+                    </group>
+
+                    <group string="Statistics" col="4">
+                        <field name="run_count" readonly="1"/>
+                        <field name="fail_count" readonly="1"/>
+                        <field name="last_triggered" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_field_validation_rule_list" model="ir.ui.view">
+        <field name="name">field.validation.rule.list</field>
+        <field name="model">field.validation.rule</field>
+        <field name="arch" type="xml">
+            <list string="Validation Rules"
+                  decoration-muted="not active"
+                  decoration-danger="severity == 'error' and active"
+                  decoration-warning="severity == 'warning' and active">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="model_id" string="Model"/>
+                <field name="field_id" string="Field"/>
+                <field name="field_ttype" string="Type" widget="badge"/>
+                <field name="rule_type"/>
+                <field name="severity" widget="badge"
+                       decoration-danger="severity == 'error'"
+                       decoration-warning="severity == 'warning'"
+                       decoration-info="severity == 'info'"/>
+                <field name="run_count" string="Runs" optional="show"/>
+                <field name="fail_count" string="Fails" optional="show"/>
+                <field name="last_triggered" optional="hide"/>
+                <field name="active" widget="boolean_toggle" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_field_validation_rule_kanban" model="ir.ui.view">
+        <field name="name">field.validation.rule.kanban</field>
+        <field name="model">field.validation.rule</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="model_id" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="field_id"/>
+                <field name="rule_type"/>
+                <field name="severity"/>
+                <field name="active"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="fvm-kanban-card o_kanban_color_#{record.color.raw_value}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <strong><field name="name"/></strong>
+                                <span t-attf-class="badge #{record.severity.raw_value == 'error' ? 'bg-danger' : record.severity.raw_value == 'warning' ? 'bg-warning text-dark' : 'bg-info'}">
+                                    <field name="severity"/>
+                                </span>
+                            </div>
+                            <div class="text-muted mt-1" style="font-size:12px">
+                                <field name="field_id"/> · <field name="rule_type"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_field_validation_rule_search" model="ir.ui.view">
+        <field name="name">field.validation.rule.search</field>
+        <field name="model">field.validation.rule</field>
+        <field name="arch" type="xml">
+            <search string="Search Validation Rules">
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="field_id"/>
+                <field name="rule_type"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active','=',True)]"/>
+                <filter string="Archived" name="archived" domain="[('active','=',False)]"/>
+                <separator/>
+                <filter string="Errors Only" name="errors"
+                        domain="[('severity','=','error')]"/>
+                <filter string="Warnings" name="warnings"
+                        domain="[('severity','=','warning')]"/>
+                <separator/>
+                <filter string="Required Rules" name="required"
+                        domain="[('rule_type','=','required')]"/>
+                <filter string="Regex Rules" name="regex"
+                        domain="[('rule_type','=','regex')]"/>
+                <filter string="Python Rules" name="python"
+                        domain="[('rule_type','=','python')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Model" name="by_model"
+                            context="{'group_by': 'model_id'}"/>
+                    <filter string="Field" name="by_field"
+                            context="{'group_by': 'field_id'}"/>
+                    <filter string="Rule Type" name="by_type"
+                            context="{'group_by': 'rule_type'}"/>
+                    <filter string="Severity" name="by_severity"
+                            context="{'group_by': 'severity'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_field_validation_rule" model="ir.actions.act_window">
+        <field name="name">Validation Rules</field>
+        <field name="res_model">field.validation.rule</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No validation rules defined yet.
+            </p>
+            <p>
+                Create your first rule to start validating import data
+                before it reaches your database.
+            </p>
+        </field>
+    </record>
+</odoo>

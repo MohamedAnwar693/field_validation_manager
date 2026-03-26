@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_import_validator_wizard_form" model="ir.ui.view">
+        <field name="name">import.validator.wizard.form</field>
+        <field name="model">import.validator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pre-Import Validator">
+                <sheet>
+                    <div class="fvm-steps mb-4">
+                        <span t-attf-class="fvm-step #{state == 'upload' and 'active' or ''}">
+                            1. Upload
+                        </span>
+                        <span class="fvm-step-sep">›</span>
+                        <span t-attf-class="fvm-step #{state == 'mapping' and 'active' or ''}">
+                            2. Map Columns
+                        </span>
+                        <span class="fvm-step-sep">›</span>
+                        <span t-attf-class="fvm-step #{state == 'result' and 'active' or ''}">
+                            3. Results
+                        </span>
+                    </div>
+
+                    <group invisible="state != 'upload'" string="Step 1 – Configure &amp; Upload">
+                        <group string="Target">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="ruleset_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="File">
+                            <field name="import_file" widget="binary" filename="import_filename"/>
+                            <field name="import_filename"/>
+                            <field name="file_type"/>
+                            <field name="csv_delimiter" invisible="file_type != 'csv'"/>
+                            <field name="has_header"/>
+                        </group>
+                    </group>
+
+                    <group invisible="state != 'mapping'" string="Step 2 – Review Column Mapping">
+                        <div class="alert alert-info" role="alert">
+                            <strong>Column mapping auto-detected.</strong>
+                            Review the mapping below. Unmapped columns (shown with their original
+                            header) will be skipped during validation.
+                        </div>
+                        <field name="column_mapping_display"
+                               widget="text"
+                               readonly="1"
+                               string="Detected Mapping"/>
+                    </group>
+
+                    <group invisible="state != 'result'" string="Step 3 – Validation Results">
+                        <field name="result_summary" widget="html" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_parse_file"
+                            string="Parse File →"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'upload'"/>
+                    <button string="Close"
+                            class="btn-secondary"
+                            special="cancel"
+                            invisible="state != 'upload'"/>
+
+                    <button name="action_run_validation"
+                            string="▶ Run Validation"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'mapping'"/>
+                    <button name="action_back_to_upload"
+                            string="← Back"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state != 'mapping'"/>
+
+                    <button name="action_view_log"
+                            string="📋 View Full Log"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'result'"/>
+                    <button name="action_back_to_mapping"
+                            string="← Back"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state != 'result'"/>
+                    <button string="Close"
+                            class="btn-secondary"
+                            special="cancel"
+                            invisible="state != 'result'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_validator_wizard" model="ir.actions.act_window">
+        <field name="name">Pre-Import Validator</field>
+        <field name="res_model">import.validator.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

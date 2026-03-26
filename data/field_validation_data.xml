@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_field_validation_log" model="ir.sequence">
+        <field name="name">Field Validation Log</field>
+        <field name="code">field.validation.log</field>
+        <field name="prefix">FVL-</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="rule_partner_name_required" model="field.validation.rule">
+        <field name="name">Partner Name – Required</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" search="[('model_id.model','=','res.partner'),('name','=','name')]"/>
+        <field name="rule_type">required</field>
+        <field name="severity">error</field>
+        <field name="sequence">10</field>
+        <field name="error_message">Partner name is required and cannot be empty.</field>
+        <field name="hint_text">Full legal name of the company or individual. Required.</field>
+    </record>
+
+    <record id="rule_partner_email_format" model="field.validation.rule">
+        <field name="name">Partner Email – Valid Format</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" search="[('model_id.model','=','res.partner'),('name','=','email')]"/>
+        <field name="rule_type">email</field>
+        <field name="severity">error</field>
+        <field name="sequence">10</field>
+        <field name="error_message">"{value}" is not a valid email address. Expected format: user@domain.com</field>
+        <field name="hint_text">Valid email address e.g. contact@company.com</field>
+    </record>
+
+    <record id="rule_partner_phone_format" model="field.validation.rule">
+        <field name="name">Partner Phone – Valid Format</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" search="[('model_id.model','=','res.partner'),('name','=','phone')]"/>
+        <field name="rule_type">phone</field>
+        <field name="severity">warning</field>
+        <field name="sequence">10</field>
+        <field name="error_message">"{value}" does not look like a valid phone number. Use international format e.g. +1 555-0100.</field>
+        <field name="hint_text">Phone number – international format recommended e.g. +1 555-0100</field>
+    </record>
+
+    <record id="rule_partner_website_url" model="field.validation.rule">
+        <field name="name">Partner Website – Valid URL</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" search="[('model_id.model','=','res.partner'),('name','=','website')]"/>
+        <field name="rule_type">url</field>
+        <field name="severity">warning</field>
+        <field name="sequence">10</field>
+        <field name="error_message">"{value}" is not a valid URL. Must start with https:// or http://</field>
+        <field name="hint_text">Company website URL e.g. https://www.example.com</field>
+    </record>
+
+    <record id="rule_partner_name_maxlength" model="field.validation.rule">
+        <field name="name">Partner Name – Max 128 Characters</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="field_id" search="[('model_id.model','=','res.partner'),('name','=','name')]"/>
+        <field name="rule_type">max_length</field>
+        <field name="severity">error</field>
+        <field name="sequence">20</field>
+        <field name="param_max">128</field>
+        <field name="error_message">Partner name "{value}" exceeds the maximum of {max} characters.</field>
+        <field name="hint_text">Maximum 128 characters</field>
+    </record>
+
+    <record id="ruleset_partner_import" model="field.validation.ruleset">
+        <field name="name">Partner Import – Standard</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="description">Standard validation rules for importing partner records (customers/vendors).</field>
+        <field name="include_example_row">True</field>
+        <field name="template_notes">Use this template to import new partners. Red columns are required. Row 2 shows hints, Row 3 shows examples — delete these before uploading.</field>
+        <field name="rule_ids" eval="[
+            (4, ref('rule_partner_name_required')),
+            (4, ref('rule_partner_email_format')),
+            (4, ref('rule_partner_phone_format')),
+            (4, ref('rule_partner_website_url')),
+            (4, ref('rule_partner_name_maxlength')),
+        ]"/>
+    </record>
+</odoo>

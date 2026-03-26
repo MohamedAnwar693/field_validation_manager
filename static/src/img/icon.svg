@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background -->
+  <rect width="100" height="100" rx="18" fill="#1a3a4a"/>
+  <!-- Shield body -->
+  <path d="M50 15 L80 28 L80 52 C80 68 65 80 50 87 C35 80 20 68 20 52 L20 28 Z"
+        fill="none" stroke="#00c9a7" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Check mark -->
+  <polyline points="35,50 46,62 67,38"
+            fill="none" stroke="#00c9a7" stroke-width="5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Exclamation dot (small warning indicator) -->
+  <circle cx="75" cy="72" r="11" fill="#f39c12"/>
+  <rect x="73.5" y="65" width="3" height="7" rx="1.5" fill="#fff"/>
+  <circle cx="75" cy="75.5" r="1.8" fill="#fff"/>
+</svg>

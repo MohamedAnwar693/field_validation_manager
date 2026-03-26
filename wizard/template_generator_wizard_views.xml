@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_template_generator_wizard_form" model="ir.ui.view">
+        <field name="name">template.generator.wizard.form</field>
+        <field name="model">template.generator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Template Generator">
+                <sheet>
+                    <group invisible="state != 'config'" string="Generate an Import Template">
+                        <div class="alert alert-info mb-3" role="alert">
+                            The generated template will include column headers, validation hints,
+                            an example row, Excel dropdown lists for allowed values,
+                            and a separate "Validation Rules" sheet for reference.
+                        </div>
+                        <group string="Target">
+                            <field name="model_id" options="{'no_create': True}"/>
+                            <field name="ruleset_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Options">
+                            <field name="file_format"/>
+                            <field name="include_all_fields"/>
+                            <field name="include_example_row"/>
+                            <field name="include_rules_sheet"
+                                   invisible="file_format != 'xlsx'"/>
+                        </group>
+                    </group>
+
+                    <group invisible="state != 'download'" string="Your Template is Ready!">
+                        <div class="alert alert-success" role="alert">
+                            ✅ Template generated successfully.
+                            Click the download button below.
+                        </div>
+                        <field name="result_file"
+                               widget="binary"
+                               filename="result_filename"
+                               string="Download Template"/>
+                        <field name="result_filename" readonly="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_generate"
+                            string="⬇ Generate Template"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'config'"/>
+                    <button string="Close"
+                            special="cancel"
+                            class="btn-secondary"/>
+                    <button name="action_back"
+                            string="← Generate Another"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state != 'download'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_template_generator_wizard" model="ir.actions.act_window">
+        <field name="name">Import Template Generator</field>
+        <field name="res_model">template.generator.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
