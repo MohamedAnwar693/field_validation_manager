@@ -1,10 +1,10 @@
-🛡
+# 🛡
+# Field Validation Rules Manager
 
-**Field Validation Rules Manager**
+**Odoo v19 Custom Module:** `field_validation_manager`
 
-**Odoo v19 Custom Module**
+Technical Documentation & Developer Reference
 
-*Technical Documentation & Developer Reference*
 
 |              |                          |
 |--------------|--------------------------|
