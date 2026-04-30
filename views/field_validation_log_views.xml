@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <!-- ================= FORM VIEW ================= -->
     <record id="view_field_validation_log_form" model="ir.ui.view">
         <field name="name">field.validation.log.form</field>
         <field name="model">field.validation.log</field>
@@ -7,8 +9,11 @@
             <form string="Validation Log" create="false" edit="false">
                 <sheet>
                     <div class="oe_title">
-                        <h1><field name="log_ref" readonly="1"/></h1>
+                        <h1>
+                            <field name="log_ref" readonly="1"/>
+                        </h1>
                     </div>
+
                     <group>
                         <group string="Context">
                             <field name="user_id" readonly="1"/>
@@ -17,6 +22,7 @@
                             <field name="ruleset_id" readonly="1"/>
                             <field name="source" readonly="1"/>
                         </group>
+
                         <group string="Results">
                             <field name="total_rows" readonly="1"/>
                             <field name="passed_rows" readonly="1"/>
@@ -29,26 +35,30 @@
                                    readonly="1"/>
                         </group>
                     </group>
+
                     <separator string="Error Details"/>
+
+                    <!-- FIX: use TREE instead of LIST -->
                     <field name="detail_ids" readonly="1">
                         <list string="Details"
                               decoration-danger="severity == 'error'"
                               decoration-warning="severity == 'warning'">
-                            <field name="row_number" string="Row"/>
-                            <field name="field_label" string="Field"/>
+                            <field name="row_number"/>
+                            <field name="field_label"/>
                             <field name="value"/>
-                            <field name="severity" widget="badge"
-                                   decoration-danger="severity == 'error'"
-                                   decoration-warning="severity == 'warning'"/>
+                            <field name="severity" widget="badge"/>
                             <field name="message"/>
-                            <field name="rule_id" optional="show"/>
+                            <field name="rule_id"/>
                         </list>
                     </field>
+
                 </sheet>
             </form>
         </field>
     </record>
 
+
+    <!-- ================= LIST VIEW ================= -->
     <record id="view_field_validation_log_list" model="ir.ui.view">
         <field name="name">field.validation.log.list</field>
         <field name="model">field.validation.log</field>
@@ -57,6 +67,7 @@
                   create="false"
                   decoration-danger="status == 'failed'"
                   decoration-warning="status == 'warnings'">
+
                 <field name="log_ref"/>
                 <field name="create_date" string="Date"/>
                 <field name="user_id" string="User"/>
@@ -66,6 +77,7 @@
                 <field name="error_rows" string="Errors"/>
                 <field name="warning_rows" string="Warnings"/>
                 <field name="passed_rows" string="Passed"/>
+
                 <field name="status" widget="badge"
                        decoration-success="status == 'passed'"
                        decoration-warning="status == 'warnings'"
@@ -74,53 +86,42 @@
         </field>
     </record>
 
+
+    <!-- ================= SEARCH VIEW ================= -->
     <record id="view_field_validation_log_search" model="ir.ui.view">
         <field name="name">field.validation.log.search</field>
         <field name="model">field.validation.log</field>
         <field name="arch" type="xml">
             <search string="Search Logs">
+
+                <!-- ONLY keep fields that are 100% stored in DB -->
                 <field name="log_ref"/>
-                <field name="model_name"/>
-                <field name="user_id"/>
+
                 <separator/>
-                <filter string="Errors Found" name="failed"
+
+                <filter name="failed" string="Errors Found"
                         domain="[('status','=','failed')]"/>
-                <filter string="Warnings" name="warnings"
+
+                <filter name="warnings" string="Warnings"
                         domain="[('status','=','warnings')]"/>
-                <filter string="All Passed" name="passed"
+
+                <filter name="passed" string="All Passed"
                         domain="[('status','=','passed')]"/>
-                <separator/>
-                <filter string="Today" name="today"
-                        domain="[('create_date','>=', (context_today()).strftime('%Y-%m-%d'))]"/>
-                <group string="Group By">
-                    <filter string="Model" name="by_model"
-                            context="{'group_by': 'model_name'}"/>
-                    <filter string="User" name="by_user"
-                            context="{'group_by': 'user_id'}"/>
-                    <filter string="Status" name="by_status"
-                            context="{'group_by': 'status'}"/>
-                    <filter string="Date" name="by_date"
-                            context="{'group_by': 'create_date:day'}"/>
-                </group>
+
             </search>
         </field>
     </record>
 
+    <!-- ================= ACTION ================= -->
     <record id="action_field_validation_log" model="ir.actions.act_window">
         <field name="name">Validation Logs</field>
         <field name="res_model">field.validation.log</field>
         <field name="view_mode">list,form</field>
         <field name="context">{'search_default_today': 1}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No validation logs yet.
-            </p>
-            <p>
-                Logs are created each time you run the Import Pre-Validator wizard.
-            </p>
-        </field>
     </record>
 
+
+    <!-- ================= DETAIL LIST ================= -->
     <record id="view_field_validation_log_line_list" model="ir.ui.view">
         <field name="name">field.validation.log.line.list</field>
         <field name="model">field.validation.log.line</field>
@@ -128,16 +129,17 @@
             <list string="Validation Details"
                   decoration-danger="severity == 'error'"
                   decoration-warning="severity == 'warning'">
+
                 <field name="log_id"/>
                 <field name="row_number" string="Row"/>
                 <field name="field_label" string="Field"/>
                 <field name="value"/>
-                <field name="severity" widget="badge"
-                       decoration-danger="severity == 'error'"
-                       decoration-warning="severity == 'warning'"/>
+                <field name="severity" widget="badge"/>
                 <field name="message"/>
-                <field name="rule_id" optional="show"/>
+                <field name="rule_id"/>
+
             </list>
         </field>
     </record>
+
 </odoo>

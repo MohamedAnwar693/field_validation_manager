@@ -33,11 +33,12 @@
     'depends': [
         'base',
         'web',
+        'mail',
         'base_setup',
     ],
     'data': [
-        'security/ir.model.access.csv',
         'security/field_validation_groups.xml',
+        'security/ir.model.access.csv',
         'data/field_validation_data.xml',
         'views/field_validation_rule_views.xml',
         'views/field_validation_ruleset_views.xml',

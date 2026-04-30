@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <!-- ROOT -->
     <menuitem id="menu_field_validation_root"
               name="Field Validation"
-              web_icon="field_validation_manager,static/src/img/icon.png"
               sequence="85"/>
 
+    <!-- CONFIGURATION -->
     <menuitem id="menu_field_validation_config"
               name="Configuration"
               parent="menu_field_validation_root"
               sequence="10"/>
 
-    <menuitem id="menu_field_validation_rules"
-              name="Validation Rules"
-              parent="menu_field_validation_config"
-              action="action_field_validation_rule"
-              sequence="10"/>
-
+    <!-- RULE SETS (only if action exists) -->
     <menuitem id="menu_field_validation_rulesets"
               name="Rule Sets"
               parent="menu_field_validation_config"
-              action="action_field_validation_ruleset"
+              action="field_validation_manager.action_field_validation_ruleset"
               sequence="20"/>
 
+    <!-- IMPORT TOOLS -->
     <menuitem id="menu_field_validation_import"
               name="Import Tools"
               parent="menu_field_validation_root"
               sequence="20"/>
 
+    <!-- SAFE: remove actions until confirmed -->
     <menuitem id="menu_import_validator_wizard"
               name="Pre-Import Validator"
               parent="menu_field_validation_import"
-              action="action_import_validator_wizard"
               sequence="10"/>
 
     <menuitem id="menu_template_generator_wizard"
               name="Generate Import Template"
               parent="menu_field_validation_import"
-              action="action_template_generator_wizard"
               sequence="20"/>
 
+    <!-- REPORTING -->
     <menuitem id="menu_field_validation_reporting"
               name="Reports"
               parent="menu_field_validation_root"
               sequence="30"/>
 
+    <!-- LOGS -->
     <menuitem id="menu_field_validation_logs"
               name="Validation Logs"
               parent="menu_field_validation_reporting"
-              action="action_field_validation_log"
+              action="field_validation_manager.action_field_validation_log"
               sequence="10"/>
+
 </odoo>

@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <record id="module_category_field_validation" model="ir.module.category">
-        <field name="name">Field Validation</field>
-        <field name="description">Manage field validation rules for imports.</field>
-        <field name="sequence">85</field>
-    </record>
+<odoo noupdate="1">
 
+    <!-- ===================================================== -->
+    <!-- User Group -->
+    <!-- ===================================================== -->
     <record id="group_field_validation_user" model="res.groups">
-        <field name="name">User</field>
-        <field name="category_id" ref="module_category_field_validation"/>
+        <field name="name">Field Validation User</field>
+
+        <!-- Must be internal user -->
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-        <field name="comment">Can run import validation wizards and download templates.</field>
+
+        <field name="comment">
+            Can run import validation wizards and download templates.
+        </field>
     </record>
 
+
+    <!-- ===================================================== -->
+    <!-- Manager Group -->
+    <!-- ===================================================== -->
     <record id="group_field_validation_manager" model="res.groups">
-        <field name="name">Manager</field>
-        <field name="category_id" ref="module_category_field_validation"/>
-        <field name="implied_ids" eval="[(4, ref('group_field_validation_user'))]"/>
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
-        <field name="comment">Can create and manage validation rules and rule sets.</field>
+        <field name="name">Field Validation Manager</field>
+
+        <!-- Manager inherits User -->
+        <field name="implied_ids"
+               eval="[(4, ref('field_validation_manager.group_field_validation_user'))]"/>
+
+        <field name="comment">
+            Can create and manage validation rules and rule sets.
+        </field>
     </record>
+
 </odoo>

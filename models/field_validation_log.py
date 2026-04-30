@@ -45,8 +45,7 @@ class FieldValidationLog(models.Model):
     detail_ids = fields.One2many(
         'field.validation.log.line',
         'log_id',
-        string='Error Details',
-        readonly=True,
+        string="Details"
     )
     detail_count = fields.Integer(
         string='Detail Count',

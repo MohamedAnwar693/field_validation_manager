@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 
 class FieldValidationRuleSet(models.Model):
     _name = 'field.validation.ruleset'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Field Validation Rule Set'
     _order = 'name'
 
@@ -24,6 +25,7 @@ class FieldValidationRuleSet(models.Model):
         string='Primary Model',
         required=True,
         domain=[('transient', '=', False)],
+        ondelete='cascade',
         help='The model this rule set is designed for.',
     )
     model_name = fields.Char(related='model_id.model', store=True)
